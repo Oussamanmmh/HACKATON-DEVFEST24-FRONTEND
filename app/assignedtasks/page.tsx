@@ -17,7 +17,7 @@ const rows = [
     region: "US",
     deadline: "2024-10-20",
     type: "Critical",
-    status: "Pending",
+    status: "In Progress",
   },
   {
     name: "Bob",
@@ -25,7 +25,7 @@ const rows = [
     region: "EU",
     deadline: "2024-11-05",
     type: "Normal",
-    status: "In Progress",
+    status: "Completed",
   },
   {
     name: "Charlie",
@@ -41,7 +41,7 @@ const rows = [
     region: "US",
     deadline: "2024-11-01",
     type: "Low",
-    status: "Pending",
+    status: "Time out",
   },
   {
     name: "Edward",
@@ -81,12 +81,53 @@ export default function BasicTable() {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Task</TableCell>
-                <TableCell align="right">Region</TableCell>
-                <TableCell align="right">Deadline</TableCell>
-                <TableCell align="right">Type</TableCell>
-                <TableCell align="right">Status</TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Name
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: "bold" }}
+                  align="right"
+                >
+                  Task
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: "bold" }}
+                  align="right"
+                >
+                  Region
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: "bold" }}
+                  align="right"
+                >
+                  Deadline
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: "bold" }}
+                  align="right"
+                >
+                  Type
+                </TableCell>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ fontWeight: "bold" }}
+                  align="right"
+                >
+                  Status
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -102,7 +143,21 @@ export default function BasicTable() {
                   <TableCell align="right">{row.region}</TableCell>
                   <TableCell align="right">{row.deadline}</TableCell>
                   <TableCell align="right">{row.type}</TableCell>
-                  <TableCell align="right">{row.status}</TableCell>
+                  <TableCell align="right">
+                    <p
+                      className={`w-fit px-3 py-1 rounded-lg ${
+                        row.status == "Completed"
+                          ? "bg-green-200 text-green-700"
+                          : row.status == "In Progress"
+                          ? " bg-purple-200 text-purple-700"
+                          : row.status == "Time out"
+                          ? " bg-red-200 text-red-700"
+                          : ""
+                      }}  `}
+                    >
+                      {row.status}
+                    </p>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
