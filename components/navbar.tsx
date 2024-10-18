@@ -3,6 +3,7 @@ import Image from "next/image";
 import parameters from "@/public/images/parametres.svg";
 import notification from "@/public/images/notification.svg";
 import anfel from "@/public/images/anfel.svg";
+import { useAuth } from "@/app/context/auth";
 
 const Navbar = () => {
   return (
