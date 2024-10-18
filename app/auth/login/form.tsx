@@ -25,7 +25,7 @@ export default function LoginForm() {
         setLoading(true);
         try {
             console.log('submitted', data);
-             const response = await axios.post('http://localhost:5000/auth/login', data );
+             const response = await axios.post('http://localhost:4000/auth/login', data );
              localStorage.setItem('user',JSON.stringify(response.data.accessToken.token) );
              console.log(response.data);
             setUser(response.data.accessToken.token);
@@ -35,6 +35,7 @@ export default function LoginForm() {
             
             reset();
         } catch (err) {
+            console.log(err);
             setError('An error occurred');
         } finally {
             setLoading(false);

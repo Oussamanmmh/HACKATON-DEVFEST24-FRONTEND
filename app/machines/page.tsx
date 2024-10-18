@@ -22,12 +22,12 @@ function createData(
 }
 
 const rows = [
-  createData("welding robots", "welding_robot_006", "200$", "20k$", "running", "docs" , "/weldingmachine"),
-  createData("leak tests", "leak_tests_005", "200$", "20k$", "running", "docs" ,"/leaktests"),
-  createData("cncmachines", "cnc_milling_004", "200$", "20k$", "running", "docs" , '/cncmachines'),
-  createData("agvs", "agv_003", "200$", "20k$", "running", "docs" ,'/agvs'),
-  createData("painting robots", "painting_robot_002", "200$", "20k$", "running", "docs" , "/paintingrobots"),
-  createData("stamping presses", "stamping_press_001", "200$", "20k$", "running", "docs" , "/stampingpresses"),
+  createData("welding robots", "welding_robot_006", "200$", "20k$", "running", "docs" , "/weldingmachinelogs"),
+  createData("leak tests", "leak_tests_005", "200$", "20k$", "running", "docs" ,"/leaktestslogs"),
+  createData("cncmachines", "cnc_milling_004", "200$", "20k$", "running", "docs" , '/cncmachineslogs'),
+  createData("agvs", "agv_003", "200$", "20k$", "running", "docs" ,'/agvslogs'),
+  createData("painting robots", "painting_robot_002", "200$", "20k$", "running", "docs" , "/paintingrobotslogs"),
+  createData("stamping presses", "stamping_press_001", "200$", "20k$", "running", "docs" , "/stampingpresseslogs"),
 ];
 
 export default function BasicTable() {
