@@ -14,6 +14,9 @@ const Navbar = ({ toggleSidebar }) => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setToken(storedUser.token);
+      
+
+      
       setUser({
         userId: storedUser.userId,
         name: "Loading...",
