@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { log } from "console";
 
 const Chat = () => {
   const [messages, setMessages] = useState<
@@ -24,7 +25,8 @@ const Chat = () => {
     startChat();
   }, []);
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (e : React.FormEvent) => {
+    e.preventDefault()
     if (newMessage.trim() === "") return;
 
     const newMsg = {
@@ -33,7 +35,7 @@ const Chat = () => {
       sender: "user",
     };
 
-    setMessages([...messages, newMsg]);
+    setMessages((prevMessages) => [...prevMessages, newMsg]);
     setNewMessage("");
     setLoading(true);
 
@@ -41,6 +43,7 @@ const Chat = () => {
       const response = await axios.post("http://localhost:4000/chat/message", {
         message: newMsg.text,
       });
+      console.log("response", response);
 
       const reply = {
         id: messages.length + 2,
@@ -50,7 +53,7 @@ const Chat = () => {
 
       console.log("reply", reply);
 
-      setMessages([...messages, newMsg, reply]);
+      setMessages((prevMessages) => [...prevMessages, reply]);
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -82,7 +85,7 @@ const Chat = () => {
                     : "bg-gray-200 text-black"
                 }`}
               >
-                {message.text}
+                <div dangerouslySetInnerHTML={{ __html: message.text }} />
               </div>
             </div>
           ))
