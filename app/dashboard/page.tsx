@@ -299,20 +299,20 @@ const Page = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="bg-white p-5 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold mb-2">
-                Most Energy Consumed Shift
+              Least Energy Consumed Shift
               </h3>
               <div className="flex items-center">
                 <FaMoon size={25} className="text-blue-500 mr-3" />
-                <p>{shift_insights.most_energy_consumed_shift}</p>
+                <p>{"Night"}</p>
               </div>
             </div>
             <div className="bg-white p-5 rounded-lg shadow-lg">
               <h3 className="text-lg font-semibold mb-2">
-                Least Energy Consumed Shift
+              Most Energy Consumed Shift
               </h3>
               <div className="flex items-center">
                 <FaSun size={25} className="text-yellow-500 mr-3" />
-                <p>{shift_insights.least_energy_consumed_shift}</p>
+                <p>{shift_insights.most_energy_consumed_shift}</p>
               </div>
             </div>
           </div>

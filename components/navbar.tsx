@@ -14,7 +14,11 @@ const Navbar = ({ toggleSidebar }) => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setToken(storedUser.token);
-      setUser({ userId: storedUser.userId, name: "Loading...", profileImage: null }); // Initial state for profile
+      setUser({
+        userId: storedUser.userId,
+        name: "Loading...",
+        profileImage: null,
+      }); // Initial state for profile
     }
   }, []);
 
@@ -23,11 +27,14 @@ const Navbar = ({ toggleSidebar }) => {
     const fetchUserProfile = async () => {
       if (user?.userId && token) {
         try {
-          const response = await axios.get(`http://localhost:4000/users/${user.userId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await axios.get(
+            `http://localhost:4000/users/${user.userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           setUser({
             ...user,
             name: response.data.name,
@@ -77,7 +84,7 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className="flex justify-between lg:pl-19 items-center p-5 bg-white shadow-md relative z-10">
+    <nav className="flex justify-between lg:pl-19 items-center p-5 bg-white relative z-10">
       <div className="flex items-center">
         {/* Hamburger Menu for mobile view */}
         <button className="lg:hidden mr-4" onClick={toggleSidebar}>
@@ -125,7 +132,10 @@ const Navbar = ({ toggleSidebar }) => {
         </div>
 
         {/* Sign Out */}
-        <button onClick={handleLogout} className="flex items-center text-red-500 hover:text-red-600">
+        <button
+          onClick={handleLogout}
+          className="flex items-center text-red-500 hover:text-red-600"
+        >
           <FiLogOut size={24} className="mr-1" />
           <span>Logout</span>
         </button>
