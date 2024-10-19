@@ -24,7 +24,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
-import "chart.js/auto"; // Import all chart.js components
+import "chart.js/auto";
 
 Chart.register(
   CategoryScale,
@@ -46,11 +46,11 @@ const HistoricalDataCharts = () => {
     cncMachine: null,
     leakTest: null,
   });
-  const [energyData, setEnergyData] = useState([]); // For energy consumption data
-  const [loading, setLoading] = useState(true); // Loading state
+  const [energyData, setEnergyData] = useState([]);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch historical data from all machines and energy data
     const fetchData = async () => {
       try {
         const weldingRobot = await axios.get(
@@ -72,7 +72,7 @@ const HistoricalDataCharts = () => {
           "http://localhost:4000/historical-data/leak-test"
         );
 
-        const energyResponse = await axios.get("http://localhost:4000/energy"); // Fetch energy consumption data
+        const energyResponse = await axios.get("http://localhost:4000/energy");
 
         setHistoricalData({
           weldingRobot: weldingRobot.data,
@@ -82,18 +82,18 @@ const HistoricalDataCharts = () => {
           cncMachine: cncMachine.data,
           leakTest: leakTest.data,
         });
-        setEnergyData(energyResponse.data); // Set energy data
-        setLoading(false); // Data fetched, stop loading
+        setEnergyData(energyResponse.data);
+
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching historical data or energy data:", error);
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  // Create data for Line Chart (Welding Robot)
   const weldingRobotData = {
     labels: historicalData.weldingRobot?.map((entry) =>
       new Date(entry.timestamp).toLocaleTimeString()
@@ -112,7 +112,6 @@ const HistoricalDataCharts = () => {
     ],
   };
 
-  // Create data for Bar Chart (Stamping Press)
   const stampingPressData = {
     labels: historicalData.stampingPress?.map((entry) =>
       new Date(entry.timestamp).toLocaleTimeString()
@@ -128,7 +127,6 @@ const HistoricalDataCharts = () => {
     ],
   };
 
-  // Create data for Radar Chart (Painting Robot)
   const paintingRobotData = {
     labels: [
       "Spray Pressure",
@@ -154,7 +152,6 @@ const HistoricalDataCharts = () => {
     ],
   };
 
-  // Create data for Doughnut Chart (AGV)
   const agvData = {
     labels: ["Battery Level", "Load Weight", "Speed", "Distance Traveled"],
     datasets: [
@@ -174,7 +171,6 @@ const HistoricalDataCharts = () => {
     ],
   };
 
-  // Create data for Polar Area Chart (CNC Machine)
   const cncMachineData = {
     labels: ["Spindle Speed", "Tool Wear", "Feed Rate", "Power Consumption"],
     datasets: [
@@ -194,7 +190,6 @@ const HistoricalDataCharts = () => {
     ],
   };
 
-  // Create data for Pie Chart (Leak Test)
   const leakTestData = {
     labels: ["Test Pressure", "Pressure Drop", "Leak Rate"],
     datasets: [
@@ -213,10 +208,9 @@ const HistoricalDataCharts = () => {
     ],
   };
 
-  // Create energy consumption data for each machine (Line Chart for better visualization)
   const energyConsumptionLineData = {
-    labels: energyData.map(
-      (entry) => new Date(entry.timestamp).toLocaleTimeString() // Use timestamp for X-axis
+    labels: energyData.map((entry) =>
+      new Date(entry.timestamp).toLocaleTimeString()
     ),
     datasets: [
       {
@@ -224,13 +218,13 @@ const HistoricalDataCharts = () => {
         data: energyData.map((entry) => entry.energy),
         borderColor: "rgba(54, 162, 235, 1)",
         backgroundColor: "rgba(54, 162, 235, 0.2)",
-        fill: true, // Makes it an area chart
-        tension: 0.4, // Smooth line
+        fill: true,
+
+        tension: 0.4,
       },
     ],
   };
 
-  // Loading spinner while data is being fetched
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
