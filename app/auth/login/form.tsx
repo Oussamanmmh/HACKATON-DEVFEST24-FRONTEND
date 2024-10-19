@@ -26,7 +26,8 @@ export default function LoginForm() {
         try {
             console.log('submitted', data);
              const response = await axios.post('http://localhost:4000/auth/login', data );
-             localStorage.setItem('user',JSON.stringify(response.data.accessToken.token) );
+             const user = {token: response.data.accessToken.token , userId: response.data.userId};
+             localStorage.setItem('user',JSON.stringify(user) );
              console.log(response.data);
             setUser(response.data.accessToken.token);
             

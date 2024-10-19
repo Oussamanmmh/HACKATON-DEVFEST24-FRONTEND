@@ -8,52 +8,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
+import axios from "axios";
 
 // Example rows data (ensure this matches your data structure)
-const rows = [
-  {
-    name: "Alice",
-    task: "Review",
-    region: "US",
-    deadline: "2024-10-20",
-    type: "Critical",
-    status: "In Progress",
-  },
-  {
-    name: "Bob",
-    task: "Development",
-    region: "EU",
-    deadline: "2024-11-05",
-    type: "Normal",
-    status: "Completed",
-  },
-  {
-    name: "Charlie",
-    task: "Testing",
-    region: "APAC",
-    deadline: "2024-10-25",
-    type: "High",
-    status: "Completed",
-  },
-  {
-    name: "Diana",
-    task: "Documentation",
-    region: "US",
-    deadline: "2024-11-01",
-    type: "Low",
-    status: "Time out",
-  },
-  {
-    name: "Edward",
-    task: "Deployment",
-    region: "EU",
-    deadline: "2024-10-30",
-    type: "Critical",
-    status: "In Progress",
-  },
-];
+
 
 export default function BasicTable() {
+  const [rows , setRows] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -72,6 +33,28 @@ export default function BasicTable() {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  React.useEffect(()=>{
+       const fetch = async () => {
+        const userId = JSON.parse(localStorage.getItem('user')).userId;
+        const token = JSON.parse(localStorage.getItem('user')).token;
+         try{
+          const response = await axios.get(`http://localhost:4000/tasks/tasks/user/${userId} ` ,
+          {headers: {
+            Authorization: `Bearer ${token}`
+          }}
+          );
+          setRows(response.data);
+          console.log(response.data);
+         }
+          catch(err){
+            console.log(err);
+          }}
+          fetch();
+
+
+    
+  },[])
 
   return (
     <div className=" bg-[#F5F6FA] p-5">
@@ -102,7 +85,7 @@ export default function BasicTable() {
                   sx={{ fontWeight: "bold" }}
                   align="right"
                 >
-                  Region
+                  Priority
                 </TableCell>
                 <TableCell
                   component="th"
@@ -126,36 +109,35 @@ export default function BasicTable() {
                   sx={{ fontWeight: "bold" }}
                   align="right"
                 >
-                  Status
+                  Is done
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedRows.map((row) => (
                 <TableRow
-                  key={row.name}
+                  key={row.taskTitle}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.taskTitle}
                   </TableCell>
-                  <TableCell align="right">{row.task}</TableCell>
-                  <TableCell align="right">{row.region}</TableCell>
-                  <TableCell align="right">{row.deadline}</TableCell>
-                  <TableCell align="right">{row.type}</TableCell>
+                  <TableCell align="right">{row.description}</TableCell>
+                  <TableCell align="right">{row.priority}</TableCell>
+                  <TableCell align="right">{row.scheduledDate}</TableCell>
+                  <TableCell align="right">{row.taskType}</TableCell>
                   <TableCell align="right">
                     <p
                       className={`w-fit px-3 py-1 rounded-lg ${
-                        row.status == "Completed"
+                        row.isDone == true
                           ? "bg-green-200 text-green-700"
-                          : row.status == "In Progress"
-                          ? " bg-purple-200 text-purple-700"
-                          : row.status == "Time out"
-                          ? " bg-red-200 text-red-700"
-                          : ""
+                         
+                          :
+                           " bg-red-200 text-red-700 "
+                          
                       }}  `}
                     >
-                      {row.status}
+                      {row.isDone.toString()}
                     </p>
                   </TableCell>
                 </TableRow>

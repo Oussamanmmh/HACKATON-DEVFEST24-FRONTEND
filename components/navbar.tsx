@@ -4,6 +4,7 @@ import parameters from "@/public/images/parametres.svg";
 import notification from "@/public/images/notification.svg";
 import anfel from "@/public/images/anfel.svg";
 import { useAuth } from "@/app/context/auth";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -26,9 +27,9 @@ const Navbar = () => {
           <p className=" bg-red-500 rounded-full text-center text-sm text-white absolute right-0 z-10 px-2">
             5
           </p>
-          <button>
+          <Link href={'/notifications'} >
             <Image alt="notification" src={notification} width={40} />
-          </button>
+          </Link >
         </div>
         <div className=" flex w-[160px] cursor-pointer">
           <div className=" bg-red-500 rounded-full overflow-hidden h-[50px] mr-3">
