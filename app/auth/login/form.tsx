@@ -1,94 +1,173 @@
-"use client"
-import axios from 'axios';
-import { useState } from 'react';
-import './form.css'
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useAuth } from '../../context/auth';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+"use client";
+import axios from "axios";
+import { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useAuth } from "../../context/auth";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type FormValues = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 };
 
-
 export default function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }, // Errors from react-hook-form
+  } = useForm<FormValues>();
 
-    const { register, handleSubmit, reset,formState: { errors } } = useForm<FormValues>();
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
-    const {setUser} = useAuth();
-    const router = useRouter();
+  const [loginError, setLoginError] = useState(""); // Renamed state variable
+  const [loading, setLoading] = useState(false);
+  const { setUser } = useAuth();
+  const router = useRouter();
 
-    const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        setLoading(true);
-        try {
-            console.log('submitted', data);
-             const response = await axios.post('http://localhost:4000/auth/login', data );
-             const user = {token: response.data.accessToken.token , userId: response.data.userId};
-             localStorage.setItem('user',JSON.stringify(user) );
-             console.log(response.data);
-            setUser(response.data.accessToken.token);
-            
-            router.push('/dashboard');
-            console.log();
-            
-            reset();
-        } catch (err) {
-            console.log(err);
-            setError('An error occurred');
-        } finally {
-            setLoading(false);
-        }
-    };
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setLoading(true);
+    setLoginError(""); // Reset login error on each submit
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/auth/login",
+        data
+      );
+      const user = {
+        token: response.data.accessToken.token,
+        userId: response.data.userId,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(response.data.accessToken.token);
 
-    return (
-        <>
-            <form className="flex flex-col  gap-5  bg-white rounded-2xl px-10 py-5  w-1/2" onSubmit={handleSubmit(onSubmit)}>
-                <h1 className='text-5xl font-bold text-center'>Login</h1>
-                <p className='text-lg font-semibold text-center'>Please enter your personnel infos to continue</p>
+      toast.success("Logged in successfully!", { position: "top-right" });
 
-                <label htmlFor="email" >Email :</label>
-                <input
-                    type="text"
-                    placeholder="Email"
-                    className='outline-none bg-gray-200 px-2 py-3'
-                    {...register('email', { required: 'Email is required' })}
-                />
-                {errors.email && <span>{errors.email.message}</span>}
+      router.push("/dashboard");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      reset();
+    } catch (error: any) {
+      setLoginError("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.", {
+        position: "top-right",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-               
-                
-               <div className='flex flex-row gap-2 items-center justify-between'>
-                        <label htmlFor="password">Password :</label>
-                        <Link href='/forgotpassword' className='text-gray-600 '>Forget Password ?</Link>
-                </div>
-                <input
-                    type="password"
-                    placeholder="Password"
-                    className='outline-none bg-gray-200 px-2 py-3'
-                    {...register('password', { required: 'Password is required' })}
-                />
-                {errors.password && <span>{errors.password.message}</span>}
-                <div className='flex items-center'>
-                        <input type="checkbox" className='mr-2'/>
-                        <label htmlFor="remember" >I accept terms and conditions .</label>
-                </div>
-                
-                  <div className='flex flex-col gap-2 px-10'>
-                        <button
-                            type="submit"
-                            className="bg-purple-700 text-white rounded-md px-4 py-3 text-xl font-semibold"
-                            disabled={loading}
-                        >
-                            {loading ? 'Loading...' : 'Login'}
-                        </button>
-                        {error && <span>{error}</span>}
-                        <Link href='/signup' className='text-gray-600 text-center mt-5'>Don't have account ?</Link>
-                        <button className='border border-purple-600 text-purple-600 rounded-md px-4 py-3 text-xl font-semibold'>Sign Up</button>
-                </div>
-            </form>
-        </>
-    );
+  return (
+    <div className="min-h-screen flex">
+      <ToastContainer />
+
+      {/* Left Section for Welcome Message */}
+      <div className="hidden lg:flex flex-col justify-center w-1/2 bg-gradient-to-r from-purple-600 to-blue-400 p-16 text-white">
+        <h1 className="text-6xl font-extrabold mb-4">Welcome To</h1>
+        <h2 className="text-5xl font-extrabold mb-4">
+          <span className="text-purple-200">Auto </span>Tracks
+        </h2>
+        <h3 className="text-4xl font-bold mb-6">Cars Factory</h3>
+        <p className="text-lg leading-relaxed">
+          Auto Tracks is the leading solution for automating and managing
+          industrial car manufacturing processes. Our platform ensures precise
+          control and monitoring of operations, maximizing efficiency and
+          productivity.
+        </p>
+        <p className="text-lg leading-relaxed mt-4">
+          From welding and stamping to painting and final assembly, Auto Tracks
+          helps manufacturers deliver top-quality vehicles while optimizing
+          resource consumption. Join us and drive your factory into the future
+          of automation.
+        </p>
+      </div>
+
+      {/* Right Section for Login Form */}
+      <div className="flex items-center justify-center w-full lg:w-1/2 p-16">
+        <form
+          className="flex flex-col gap-6 bg-white rounded-2xl shadow-2xl px-16 py-12 w-full max-w-lg"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h1 className="text-5xl font-bold text-center text-gray-800">
+            Login
+          </h1>
+          <p className="text-center text-gray-500 text-lg mb-4">
+            Please enter your information to continue
+          </p>
+
+          {/* Email Field */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email" className="text-gray-700 font-semibold">
+              Email:
+            </label>
+            <input
+              type="text"
+              id="email"
+              placeholder="Enter your email"
+              className="border border-gray-300 rounded-lg px-5 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-gray-100 shadow-sm"
+              {...register("email", { required: "Email is required" })}
+            />
+            {errors.email && (
+              <span className="text-red-500 text-sm">
+                {errors.email.message}
+              </span>
+            )}
+          </div>
+
+          {/* Password Field */}
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between">
+              <label htmlFor="password" className="text-gray-700 font-semibold">
+                Password:
+              </label>
+              <Link href="/forgotpassword" className="text-purple-600 text-sm">
+                Forgot Password?
+              </Link>
+            </div>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              className="border border-gray-300 rounded-lg px-5 py-3 focus:ring-2 focus:ring-purple-500 focus:outline-none bg-gray-100 shadow-sm"
+              {...register("password", { required: "Password is required" })}
+            />
+            {errors.password && (
+              <span className="text-red-500 text-sm">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
+
+          {/* Terms and Conditions */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="terms"
+              className="form-checkbox h-5 w-5 text-purple-600"
+            />
+            <label htmlFor="terms" className="text-gray-700">
+              I accept terms and conditions
+            </label>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className={`bg-purple-700 text-white font-semibold rounded-lg py-4 mt-4 w-full text-lg transition duration-300 hover:bg-purple-800 ${
+              loading && "cursor-not-allowed"
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+
+          {/* Error Message */}
+          {loginError && (
+            <span className="text-red-500 text-center mt-3">{loginError}</span>
+          )}
+        </form>
+      </div>
+    </div>
+  );
 }
