@@ -26,41 +26,36 @@ export default function RootLayout({
 }>) {
   // State to store the user login status
   const [user, setUser] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState(false); // Sidebar open state
 
   useEffect(() => {
-    // This runs only in the browser
-    const token = localStorage.getItem('user');
-    if (token) {
-      setUser(true); // User is logged in
-    } else {
-      setUser(false); // User is not logged in
-    }
-  }, []); // Empty dependency array ensures this runs once on mount
+    const token = localStorage.getItem("user");
+    setUser(!!token);
+  }, []);
+
+  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
   return (
     <html lang="en">
       <body className="h-screen flex flex-col">
         <AuthProvider>
-          {/* Navbar at the top */}
-          {
-            user ? (
-              <div>
-                <Navbar />
+          {user ? (
+            <>
+              <Navbar toggleSidebar={toggleSidebar} />
 
-                <div className="flex flex-1 overflow-hidden">
-                  {/* Sidebar on the left */}
-                  <Sidebar />
+              <div className="flex flex-1 overflow-hidden">
+                <Sidebar
+                  isSidebarOpen={isSidebarOpen}
+                  toggleSidebar={toggleSidebar}
+                />
 
-                  {/* Main Content Area */}
-                  <main className="flex-1 p-5 overflow-auto">
-                    {children} {/* Page-specific content */}
-                  </main>
-                </div>
+                {/* Main Content Area */}
+                <main className="flex-1 p-5 overflow-auto">{children}</main>
               </div>
-            ) : (
-              <LoginPage />
-            )
-          }
+            </>
+          ) : (
+            <LoginPage />
+          )}
         </AuthProvider>
       </body>
     </html>
