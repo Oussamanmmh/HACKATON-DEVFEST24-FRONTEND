@@ -1,37 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Analytics Platform for Manufacturing Operation .
+## Frontend Project Description
+This project serves as the frontend for monitoring and visualizing real-time data collected from various manufacturing machines, including welding robots, stamping presses, CNC machines, and AGVs. The frontend provides an intuitive user interface to track machine performance, monitor production metrics, and access detailed analytics.
 
-## Getting Started
+Key features of the frontend include :
 
-First, run the development server:
+### Real-time Monitoring : 
+Display live data such as machine status, production counts, and alerts.
+### Data Visualization :
+Graphs and charts to visualize historical performance and production trends.
+### Customizable Dashboards :
+Users can configure dashboards to monitor specific machines and metrics.
+### API Integration :
+The frontend interacts with the backend APIs to fetch and display real-time data from machines.
+Technologies used for the frontend include React, # Next.js, and # Tailwind CSS to ensure a responsive, fast, and user-friendly experience.
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Framework: Next.js. 
+
+Styling: Tailwind CSS.
+
+WebSocket: Socket.IO (for real-time communication).
+
+Data Fetching: Axios for API calls. 
+
+State Management: React Hooks/Context API.  
+
+## Set up 
+### 1. Clone the Repository
+To get started, clone the repository to your local machine:
+```plaintext
+git clone https://github.com/Amine2240/dashstack-frontend.git
 ```
+### 2. Navigate to the project directory:
+```plaintext
+cd dashstack-frontend
+```
+### 3. Install Dependencies
+```plaintext
+npm install
+```
+### 4. npm run dev
+```plaintext
+npm run dev
+```
+The app will be running at http://localhost:3000/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# dashstack-frontend
