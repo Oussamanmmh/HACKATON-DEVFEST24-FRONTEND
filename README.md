@@ -1,7 +1,7 @@
 # Smart Analytics Platform for Manufacturing Operation .
 ## Frontend Project Description
 This project serves as the frontend for monitoring and visualizing real-time data collected from various manufacturing machines, including welding robots, stamping presses, CNC machines, and AGVs. The frontend provides an intuitive user interface to track machine performance, monitor production metrics, and access detailed analytics.
-
+main branch : main
 ## Key features  :
 ### Real-time Monitoring : 
 Display live data such as machine status, production counts, and alerts.
