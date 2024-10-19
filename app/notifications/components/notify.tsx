@@ -1,17 +1,29 @@
 "use client"
 import axios from 'axios';
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function Notify({ machineId, message, title, updatedAt, isRead, id, selectedNotifications, setSelectedNotifications }) {
+interface NotifyProps {
+    machineId: string;
+    message: string;
+    title: string;
+    updatedAt: string;
+    isRead: boolean;
+    id: string;
+    selectedNotifications: string[];
+    setSelectedNotifications: (notifications: string[]) => void;
+}
+
+export default function Notify({ machineId, message, title, updatedAt, isRead, id, selectedNotifications, setSelectedNotifications }: NotifyProps) {
     const [showText, setShowText] = React.useState(false);
     const [read, setRead] = React.useState(isRead);
+    
 
     const handleViewText = async () => {
         try {
             setShowText(!showText);
             if (!isRead) {
                 setRead(true);
-                await axios.put(`http://localhost:4000/notifications/notifications/${id}/read`);
+                await axios.put(`http://localhost:4000/notifications/${id}/read`);
             }
         } catch (err) {
             console.log(err);
