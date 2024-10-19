@@ -4,20 +4,23 @@ import axios from "axios";
 import trash from "@/public/images/trash.svg";
 import React from "react";
 
-export default function Header({
-  selectedNotifications,
-  notifications,
-  setNotifications,
-  setSelectedNotifications,
-}) {
+interface HeaderProps {
+  selectedNotifications: string[];
+  notifications: { _id: string }[];
+  setNotifications: React.Dispatch<React.SetStateAction<{ _id: string }[]>>;
+  setSelectedNotifications: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function Header({ selectedNotifications, notifications, setNotifications, setSelectedNotifications }: HeaderProps) {
+  
   // Function to handle the removal of selected notifications
   const handleDeleteSelected = async () => {
     try {
       // Loop through selected notifications and send a DELETE request for each
       for (const notificationId of selectedNotifications) {
-        await axios.delete(
-          `http://localhost:4000/notifications/${notificationId}`
-        );
+
+        await axios.delete(`http://localhost:4000/notifications/${notificationId}`);
+
       }
 
       // After successful deletion, update the front-end state by filtering out the deleted notifications

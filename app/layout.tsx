@@ -8,8 +8,12 @@ import { AuthProvider } from "./context/auth";
 import LoginPage from "./auth/login/page";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress"; // Import spinner
+<<<<<<< HEAD
 import { messaging, getToken } from "@/firebase"; // Import Firebase config
 import axios from "axios"; // Axios to send the FCM token to the server
+=======
+import ProfilePage from "@/components/profile/profilePage";
+>>>>>>> d1fc09f0d16f835fa9acd6167603f324a6f307c1
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -112,6 +116,8 @@ export default function RootLayout({
                   isSidebarOpen={isSidebarOpen}
                   toggleSidebar={toggleSidebar}
                 />
+                
+                
 
                 {/* Main Content Area */}
                 <main className="flex-1 p-5 overflow-auto">{children}</main>
