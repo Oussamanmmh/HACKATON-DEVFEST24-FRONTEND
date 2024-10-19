@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import dashboardicon from "@/public/images/dashboardicon.svg";
 import machinesicon from "@/public/images/machinesicon.svg";
 import chaticon from "@/public/images/chaticon.svg";
@@ -26,7 +26,12 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     { id: 2, text: "machines", path: "/machines", icon: machinesicon },
     { id: 3, text: "chat with bots", path: "/chatwithbots", icon: chaticon },
     { id: 4, text: "schedule", path: "/schedule", icon: scheduelicon },
-    { id: 5, text: "statistiques", path: "/statistiques", icon: statistiquesicon },
+    {
+      id: 5,
+      text: "statistiques",
+      path: "/statistiques",
+      icon: statistiquesicon,
+    },
     { id: 6, text: "tables", path: "/tables", icon: tablesicon },
     { id: 7, text: "incomes", path: "/incomes", icon: incomesicon },
     { id: 8, text: "reports", path: "/reports", icon: reportsicon },
@@ -39,7 +44,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     <div
       className={`fixed top-0 left-0 w-64 h-full bg-white shadow-xl transition-transform transform ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } lg:translate-x-0 lg:static z-50`}
+      } lg:translate-x-0 lg:static z-50 overflow-y-auto`} // Added "overflow-y-auto" for scrolling
     >
       {/* Close button for mobile */}
       <button className="lg:hidden p-4" onClick={toggleSidebar}>
@@ -56,7 +61,13 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
             }`}
           >
             <Link href={item.path} className="flex items-center w-full">
-              <Image alt="icon" src={item.icon} width={24} height={24} className="mr-3" />
+              <Image
+                alt="icon"
+                src={item.icon}
+                width={24}
+                height={24}
+                className="mr-3"
+              />
               <span>{item.text}</span>
             </Link>
           </li>
