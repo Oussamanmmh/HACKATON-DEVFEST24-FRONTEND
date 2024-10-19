@@ -33,7 +33,7 @@ const rows = [
     "20k$ (Medium)",
     "running",
     "docs",
-    "/weldingmachinelogs"
+    "machines/weldingmachinelogs"
   ),
   createData(
     "Leak Tests",
@@ -42,7 +42,7 @@ const rows = [
     "20k$ (Medium)",
     "running",
     "docs",
-    "/leaktestslogs"
+    "machines/leaktestslogs"
   ),
   createData(
     "CNC Machines",
@@ -51,7 +51,7 @@ const rows = [
     "30K$ (Medium)",
     "maintenance",
     "docs",
-    "/cncmachineslogs"
+    "machines/cncmachineslogs"
   ),
   createData(
     "AGVs",
@@ -60,7 +60,7 @@ const rows = [
     "20k$ (Medium)",
     "running",
     "docs",
-    "/agvslogs"
+    "machines/agvslogs"
   ),
   createData(
     "Painting Robots",
@@ -69,7 +69,7 @@ const rows = [
     "100K$ (Medium)",
     "running",
     "docs",
-    "/paintingrobotslogs"
+    "machines/paintingrobotslogs"
   ),
   createData(
     "Stamping Presses",
@@ -78,7 +78,7 @@ const rows = [
     "14k$ (Medium)",
     "maintenance",
     "docs",
-    "/stampingpresseslogs"
+    "machines/stampingpresseslogs"
   ),
 ];
 
