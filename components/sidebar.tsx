@@ -32,7 +32,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
       path: "/statistiques",
       icon: statistiquesicon,
     },
-    { id: 6, text: "Tables", path: "/tables", icon: tablesicon },
+    // { id: 6, text: "Tables", path: "/tables", icon: tablesicon },
     { id: 8, text: "Reports", path: "/reports", icon: reportsicon },
     { id: 9, text: "Team", path: "/team", icon: teamicon },
     // { id: 10, text: "Settings", path: "/settings", icon: settingsicon },
