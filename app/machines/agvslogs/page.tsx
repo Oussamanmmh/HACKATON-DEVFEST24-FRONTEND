@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import agvImage from "@/public/images/weldingimage.svg"; // Replace with correct image path for AGV
+import agvImage from "@/public/images/agv.svg"; // Replace with correct image path for AGV
 import view from "@/public/images/view.svg";
 import thresholds from "@/public/images/thresholds.svg";
 import reports from "@/public/images/reports.svg";

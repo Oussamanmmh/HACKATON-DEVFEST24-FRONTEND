@@ -99,11 +99,11 @@ const getStatusStyle = (status: string) => {
 // Icons for machines (you can replace these with actual image paths)
 const machineIcons: { [key: string]: string } = {
   "Welding Robots": "/images/weldingimage.svg",
-  "Leak Tests": "/images/weldingimage.svg",
-  "CNC Machines": "/images/weldingimage.svg",
-  AGVs: "/images/weldingimage.svg",
-  "Painting Robots": "/images/weldingimage.svg",
-  "Stamping Presses": "/images/weldingimage.svg",
+  "Leak Tests": "/images/leak.svg",
+  "CNC Machines": "/images/cnc.svg",
+  AGVs: "/images/agv.svg",
+  "Painting Robots": "/images/painting.svg",
+  "Stamping Presses": "/images/stamping.svg",
 };
 
 export default function AdvancedTable() {

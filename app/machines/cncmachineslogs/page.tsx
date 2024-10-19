@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import cncMachineImage from "@/public/images/weldingimage.svg";
+import cncMachineImage from "@/public/images/cnc.svg";
 import view from "@/public/images/view.svg";
 import thresholds from "@/public/images/thresholds.svg";
 import reports from "@/public/images/reports.svg";

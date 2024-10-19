@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import view from "@/public/images/view.svg";
-import paintingImage from "@/public/images/weldingimage.svg"; // Replace with correct image path
+import paintingImage from "@/public/images/painting.svg"; // Replace with correct image path
 import thresholds from "@/public/images/thresholds.svg";
 import reports from "@/public/images/reports.svg";
 import * as React from "react";

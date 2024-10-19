@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 
-import stampingImage from "@/public/images/weldingimage.svg"; // Replace with correct image path
+import stampingImage from "@/public/images/stamping.svg"; // Replace with correct image path
 import view from "@/public/images/view.svg";
 import thresholds from "@/public/images/thresholds.svg";
 import reports from "@/public/images/reports.svg";

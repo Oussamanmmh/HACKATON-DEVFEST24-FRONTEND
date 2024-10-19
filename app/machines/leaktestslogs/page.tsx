@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import weldingimage from "@/public/images/weldingimage.svg";
+import weldingimage from "@/public/images/leak.svg";
 import view from "@/public/images/view.svg";
 import thresholds from "@/public/images/thresholds.svg";
 import reports from "@/public/images/reports.svg";
