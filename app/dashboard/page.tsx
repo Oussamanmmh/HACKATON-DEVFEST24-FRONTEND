@@ -1,10 +1,17 @@
-"use client"; // Ensure it's a Client Component
+"use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
-import CircularProgress from "@mui/material/CircularProgress"; // Spinner for loading
-import { FaRobot, FaCogs, FaIndustry, FaTachometerAlt, FaMoon, FaSun } from "react-icons/fa"; // Icons for machines and shifts
-import { AiOutlineWarning, AiOutlineCheckCircle } from "react-icons/ai"; // Status Icons
+import CircularProgress from "@mui/material/CircularProgress";
+import {
+  FaRobot,
+  FaCogs,
+  FaIndustry,
+  FaTachometerAlt,
+  FaMoon,
+  FaSun,
+} from "react-icons/fa";
+import { AiOutlineWarning, AiOutlineCheckCircle } from "react-icons/ai";
 import humanresources from "@/public/images/hr.svg";
 import path from "@/public/images/path.svg";
 import pathdown from "@/public/images/pathdown.svg";
@@ -12,7 +19,6 @@ import totalorder from "@/public/images/totalorder.svg";
 import totalsales from "@/public/images/totalsales.svg";
 import opi from "@/public/images/opi.svg";
 
-// Define TypeScript interfaces for the dashboard and energy summary data
 interface Task {
   _id: string;
   taskTitle: string;
@@ -80,36 +86,40 @@ const Page = () => {
     completedTasks: 0,
   });
 
-  const [energySummary, setEnergySummary] = useState<EnergySummary | null>(null);
-  const [loading, setLoading] = useState(true); // Loading state to manage spinner
+  const [energySummary, setEnergySummary] = useState<EnergySummary | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch total tasks
-        const tasksResponse = await axios.get<Task[]>("http://localhost:4000/tasks");
+        const tasksResponse = await axios.get<Task[]>(
+          "http://localhost:4000/tasks"
+        );
         const totalTasks = tasksResponse.data.length;
 
-        // Fetch total warnings/errors
-        const logsResponse = await axios.get<Log[]>("http://localhost:4000/logs");
+        const logsResponse = await axios.get<Log[]>(
+          "http://localhost:4000/logs"
+        );
         const openWarnings = logsResponse.data.filter(
           (log: Log) => log.status === "warning" || log.status === "danger"
         ).length;
 
-        // Fetch total users
-        const usersResponse = await axios.get<User[]>("http://localhost:4000/users/users");
+        const usersResponse = await axios.get<User[]>(
+          "http://localhost:4000/users/users"
+        );
         const totalUsers = usersResponse.data.length;
 
-        // Fetch completed tasks
         const completedTasks = tasksResponse.data.filter(
           (task: Task) => task.isDone
         ).length;
 
-        // Fetch energy summary data
-        const energyResponse = await axios.get("http://localhost:4000/ai/energy-summary");
+        const energyResponse = await axios.get(
+          "http://localhost:4000/ai/energy-summary"
+        );
         const energyData = energyResponse.data.summary.summary;
 
-        // Set all the data at once and stop loading
         setDashboardData({
           totalTasks,
           openWarnings,
@@ -117,17 +127,19 @@ const Page = () => {
           completedTasks,
         });
         setEnergySummary(energyData);
-        setLoading(false); // Data is ready, stop loading
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching dashboard or energy summary data:", error);
-        setLoading(false); // Stop loading on error as well
+        console.error(
+          "Error fetching dashboard or energy summary data:",
+          error
+        );
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  // Loading spinner while data is being fetched
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -141,7 +153,7 @@ const Page = () => {
       id: 0,
       name: "Human Resources",
       image: humanresources,
-      amount: `${dashboardData.totalUsers}`, // Total users
+      amount: `${dashboardData.totalUsers}`,
       percentage: "",
       text: "Total users in the system",
       sign: path,
@@ -151,7 +163,7 @@ const Page = () => {
       id: 1,
       name: "Total Tasks",
       image: totalorder,
-      amount: `${dashboardData.totalTasks}`, // Total tasks
+      amount: `${dashboardData.totalTasks}`,
       percentage: "",
       text: "Total tasks in the system",
       sign: path,
@@ -161,7 +173,7 @@ const Page = () => {
       id: 2,
       name: "Total Warnings",
       image: totalsales,
-      amount: `${dashboardData.openWarnings}`, // Total warnings
+      amount: `${dashboardData.openWarnings}`,
       percentage: "",
       text: "Open warnings or critical errors",
       sign: pathdown,
@@ -171,7 +183,7 @@ const Page = () => {
       id: 3,
       name: "Completed Tasks",
       image: opi,
-      amount: `${dashboardData.completedTasks}`, // Completed tasks
+      amount: `${dashboardData.completedTasks}`,
       percentage: "",
       text: "Completed tasks in the system",
       sign: path,
@@ -179,16 +191,14 @@ const Page = () => {
     },
   ];
 
-  // Helper function to make machine names human-readable
   const formatMachineName = (machineId: string) => {
     return machineId
-      .replace(/_/g, " ") // Replace underscores with spaces
-      .split(" ") // Split into words
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize each word
-      .join(" "); // Join back into a single string
+      .replace(/_/g, " ")
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
-  // Assign icons and colors based on machine and energy efficiency
   const getMachineIcon = (machineId: string) => {
     switch (machineId) {
       case "welding_robot_006":
@@ -232,7 +242,7 @@ const Page = () => {
         {myarray.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col bg-white w-full  rounded-lg p-5 shadow-2xl" // Fixed width and height
+            className="flex flex-col bg-white w-full  rounded-lg p-5 shadow-2xl"
           >
             <div className="flex items-start place-content-between">
               <div className="flex flex-col">
@@ -288,14 +298,18 @@ const Page = () => {
           <h2 className="text-2xl font-bold mb-4">Shift Insights</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="bg-white p-5 rounded-lg shadow-lg">
-              <h3 className="text-lg font-semibold mb-2">Most Energy Consumed Shift</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Most Energy Consumed Shift
+              </h3>
               <div className="flex items-center">
                 <FaMoon size={25} className="text-blue-500 mr-3" />
                 <p>{shift_insights.most_energy_consumed_shift}</p>
               </div>
             </div>
             <div className="bg-white p-5 rounded-lg shadow-lg">
-              <h3 className="text-lg font-semibold mb-2">Least Energy Consumed Shift</h3>
+              <h3 className="text-lg font-semibold mb-2">
+                Least Energy Consumed Shift
+              </h3>
               <div className="flex items-center">
                 <FaSun size={25} className="text-yellow-500 mr-3" />
                 <p>{shift_insights.least_energy_consumed_shift}</p>
@@ -305,13 +319,21 @@ const Page = () => {
 
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-2">Shift Energy Trends</h3>
-            {Object.entries(shift_insights.shift_energy_trends).map(([shift, data]) => (
-              <div key={shift} className="bg-white p-5 rounded-lg shadow-lg mb-4">
-                <h4 className="text-md font-semibold mb-1">{shift} Shift</h4>
-                <p>Total Energy: {data.total_energy} kWh</p>
-                <p>Average Energy per Machine: {data.average_energy_per_machine} kWh</p>
-              </div>
-            ))}
+            {Object.entries(shift_insights.shift_energy_trends).map(
+              ([shift, data]) => (
+                <div
+                  key={shift}
+                  className="bg-white p-5 rounded-lg shadow-lg mb-4"
+                >
+                  <h4 className="text-md font-semibold mb-1">{shift} Shift</h4>
+                  <p>Total Energy: {data.total_energy} kWh</p>
+                  <p>
+                    Average Energy per Machine:{" "}
+                    {data.average_energy_per_machine} kWh
+                  </p>
+                </div>
+              )
+            )}
           </div>
         </section>
       )}
@@ -322,12 +344,18 @@ const Page = () => {
           <h2 className="text-2xl font-bold mb-4">Overall Trends</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {overall_trends.anomalies.map((anomaly) => (
-              <div key={anomaly.machine_id} className="bg-white p-5 rounded-lg shadow-lg">
-                <h3 className="text-lg font-semibold mb-2 text-red-500">Anomaly Detected</h3>
+              <div
+                key={anomaly.machine_id}
+                className="bg-white p-5 rounded-lg shadow-lg"
+              >
+                <h3 className="text-lg font-semibold mb-2 text-red-500">
+                  Anomaly Detected
+                </h3>
                 <div className="flex items-center mb-2">
                   <AiOutlineWarning size={25} className="text-red-500 mr-3" />
                   <p>
-                    {formatMachineName(anomaly.machine_id)} - {anomaly.shift} Shift
+                    {formatMachineName(anomaly.machine_id)} - {anomaly.shift}{" "}
+                    Shift
                   </p>
                 </div>
                 <p className="text-sm italic">{anomaly.description}</p>
@@ -335,13 +363,20 @@ const Page = () => {
             ))}
 
             <div className="bg-white p-5 rounded-lg shadow-lg">
-              <h3 className="text-lg font-semibold mb-2 text-green-500">Optimization Suggestions</h3>
-              {overall_trends.optimization_suggestions.map((suggestion, index) => (
-                <div key={index} className="flex items-start mb-2">
-                  <AiOutlineCheckCircle size={25} className="text-green-500 mr-3" />
-                  <p>{suggestion}</p>
-                </div>
-              ))}
+              <h3 className="text-lg font-semibold mb-2 text-green-500">
+                Optimization Suggestions
+              </h3>
+              {overall_trends.optimization_suggestions.map(
+                (suggestion, index) => (
+                  <div key={index} className="flex items-start mb-2">
+                    <AiOutlineCheckCircle
+                      size={25}
+                      className="text-green-500 mr-3"
+                    />
+                    <p>{suggestion}</p>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </section>
