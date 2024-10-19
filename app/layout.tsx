@@ -7,6 +7,7 @@ import Sidebar from "@/components/sidebar";
 import { AuthProvider } from "./context/auth";
 import LoginPage from "./auth/login/page";
 import { useEffect, useState } from "react";
+import CircularProgress from "@mui/material/CircularProgress"; // Import spinner
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -26,14 +27,21 @@ export default function RootLayout({
 }>) {
   // State to store the user login status
   const [user, setUser] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state for verification
   const [isSidebarOpen, setSidebarOpen] = useState(false); // Sidebar open state
 
   useEffect(() => {
     const token = localStorage.getItem("user");
     setUser(!!token);
+    setLoading(false); // Stop loading after verification
   }, []);
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  if (loading) {
+    // Display spinner while verifying login
+    return <div className="flex justify-center items-center h-screen"></div>;
+  }
 
   return (
     <html lang="en">
