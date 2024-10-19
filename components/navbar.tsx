@@ -3,10 +3,16 @@ import Image from "next/image";
 import { FiMenu, FiBell, FiUser } from "react-icons/fi"; // Hamburger menu, bell icon, user icon for default image
 import Link from "next/link";
 import axios from "axios";
+import ProfilePage from "./profile/profilePage";
 
-const Navbar = ({ toggleSidebar }) => {
+interface NavbarProps {
+  toggleSidebar: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [userId, setUserId] = useState(null);
+  const [show, setShow] = useState(false);
   const [token, setToken] = useState(null);
 
   // Fetch token and userId from localStorage
@@ -70,7 +76,7 @@ const Navbar = ({ toggleSidebar }) => {
             <FiBell size={30} className="text-gray-700" />
           </Link>
         </div>
-        <div className="flex items-center cursor-pointer">
+        <div className="flex items-center cursor-pointer" onClick={()=>setShow(true)}>
           <div className="bg-gray-300 rounded-full overflow-hidden h-[50px] w-[50px] flex items-center justify-center mr-3">
             {/* Default user icon */}
             <FiUser size={30} className="text-white" />
@@ -82,6 +88,7 @@ const Navbar = ({ toggleSidebar }) => {
           </div>
         </div>
       </div>
+      <ProfilePage show={show} setShow={setShow}/>
     </nav>
   );
 };

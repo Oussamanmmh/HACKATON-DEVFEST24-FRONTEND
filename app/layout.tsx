@@ -8,7 +8,6 @@ import { AuthProvider } from "./context/auth";
 import LoginPage from "./auth/login/page";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress"; // Import spinner
-import ProfilePage from "@/components/profile/profilePage";
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -57,7 +56,6 @@ export default function RootLayout({
                   isSidebarOpen={isSidebarOpen}
                   toggleSidebar={toggleSidebar}
                 />
-                <ProfilePage/>
                 
 
                 {/* Main Content Area */}
