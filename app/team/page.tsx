@@ -64,6 +64,7 @@ export default function AdvancedTable() {
         console.log(error);
       }
     };
+    fetchuser();
   }, []);
 
   return (

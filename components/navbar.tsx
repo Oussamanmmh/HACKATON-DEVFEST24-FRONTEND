@@ -14,7 +14,11 @@ const Navbar = ({ toggleSidebar }) => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setToken(storedUser.token);
-      setUser({ userId: storedUser.userId, name: "Loading...", profileImage: null }); // Initial state for profile
+      setUser({
+        userId: storedUser.userId,
+        name: "Loading...",
+        profileImage: null,
+      }); // Initial state for profile
     }
   }, []);
 
@@ -23,16 +27,21 @@ const Navbar = ({ toggleSidebar }) => {
     const fetchUserProfile = async () => {
       if (user?.userId && token) {
         try {
-          const response = await axios.get(`http://localhost:4000/users/${user.userId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser({
-            ...user,
+          const response = await axios.get(
+            `http://localhost:4000/users/users/${user.userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setUser((prevUser) => ({
+            ...prevUser,
             name: response.data.name,
             profileImage: response.data.profileImage || null, // Use a default image if none available
-          });
+            role: response.data.role || "",
+          }));
+          console.log("rrrrrrrrrrrr : ", user);
         } catch (error) {
           console.error("Error fetching user profile:", error);
         }
@@ -120,12 +129,15 @@ const Navbar = ({ toggleSidebar }) => {
           </div>
           <div className="hidden sm:block">
             <p className="font-semibold">{user?.name || "User Name"}</p>
-            <p>Admin</p>
+            <p>{user?.role} </p>
           </div>
         </div>
 
         {/* Sign Out */}
-        <button onClick={handleLogout} className="flex items-center text-red-500 hover:text-red-600">
+        <button
+          onClick={handleLogout}
+          className="flex items-center text-red-500 hover:text-red-600"
+        >
           <FiLogOut size={24} className="mr-1" />
           <span>Logout</span>
         </button>

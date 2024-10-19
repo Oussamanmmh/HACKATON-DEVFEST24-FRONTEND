@@ -53,7 +53,8 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
           <li
             key={item.id}
             className={`flex items-center p-3 rounded-lg transition-colors duration-300 ${
-              pathname === item.path
+              pathname === item.path ||
+              (item.path === "/dashboard" && pathname === "/") // Check for '/' or '/dashboard'
                 ? "bg-purple-700 text-white"
                 : "text-gray-700 hover:bg-gray-200"
             }`}
