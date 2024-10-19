@@ -45,13 +45,13 @@ const Navbar = ({ toggleSidebar }) => {
   }, [userId, token]);
 
   return (
-    <nav className="flex justify-between lg:pl-20 items-center  p-5 bg-white shadow-md relative z-10">
+    <nav className="flex justify-between lg:pl-19 items-center  p-5 bg-white shadow-md relative z-10">
       <div className="flex items-center">
         {/* Hamburger Menu for mobile view */}
         <button className="lg:hidden mr-4" onClick={toggleSidebar}>
           <FiMenu size={24} />
         </button>
-        <label htmlFor="" className="text-xl font-bold">
+        <label htmlFor="" className="text-3xl font-bold">
           <p>
             <span className="text-purple-500">Auto</span>Track
           </p>
