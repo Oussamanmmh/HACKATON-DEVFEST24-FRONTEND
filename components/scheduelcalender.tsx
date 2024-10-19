@@ -1,12 +1,11 @@
-// src/components/ScheduleCalendar.js
 "use client";
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css"; // Import the calendar's CSS
+import "react-calendar/dist/Calendar.css";
 import { format, isSameDay, parseISO } from "date-fns";
 import axios from "axios";
-import { AiOutlineCalendar } from "react-icons/ai"; // Calendar icon
-import { FaRobot, FaCogs, FaIndustry, FaWrench } from "react-icons/fa"; // Icons for machines
+import { AiOutlineCalendar } from "react-icons/ai";
+import { FaRobot, FaCogs, FaIndustry, FaWrench } from "react-icons/fa";
 
 const ScheduleCalendar = () => {
   const [scheduleData, setScheduleData] = useState({});
@@ -30,24 +29,21 @@ const ScheduleCalendar = () => {
     fetchSchedule();
   }, []);
 
-  // Format the dates from the schedule into Date objects
   const events = scheduleData?.schedule?.map((event) => ({
     ...event,
     scheduled_date: parseISO(event.scheduled_date),
   }));
 
-  // Check if a given day has an event scheduled
   const tileContent = ({ date }) => {
     const eventForDay = events?.find((event) =>
       isSameDay(event.scheduled_date, date)
     );
 
     return eventForDay ? (
-      <div style={{ color: "#ff4500", fontWeight: "bold" }}>●</div> // Red dot for scheduled events
+      <div style={{ color: "#ff4500", fontWeight: "bold" }}>●</div>
     ) : null;
   };
 
-  // Display the events when a date is clicked
   const handleDateClick = (date) => {
     setSelectedDate(date);
   };
@@ -56,7 +52,6 @@ const ScheduleCalendar = () => {
     isSameDay(event.scheduled_date, selectedDate)
   );
 
-  // Add icons for different machine types (example usage of icons)
   const getMachineIcon = (machineId) => {
     switch (machineId) {
       case "welding_robot_006":
@@ -76,7 +71,9 @@ const ScheduleCalendar = () => {
     <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-100">
       <div className="flex items-center mb-8">
         <AiOutlineCalendar size={40} className="text-blue-500 mr-3" />
-        <h2 className="text-4xl font-bold text-gray-800">Maintenance Schedule Calendar</h2>
+        <h2 className="text-4xl font-bold text-gray-800">
+          Maintenance Schedule Calendar
+        </h2>
       </div>
 
       <div className="w-full lg:w-4/5 bg-white rounded-lg shadow-lg p-6">
@@ -85,7 +82,9 @@ const ScheduleCalendar = () => {
             <p>Loading schedule...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4"> {/* Changed to a grid layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {" "}
+            {/* Changed to a grid layout */}
             {/* Calendar Section */}
             <div>
               <Calendar
@@ -94,7 +93,6 @@ const ScheduleCalendar = () => {
                 className="w-full h-auto shadow-md rounded-lg p-4"
               />
             </div>
-
             {/* Event Details Section */}
             <div>
               {selectedDate ? (
