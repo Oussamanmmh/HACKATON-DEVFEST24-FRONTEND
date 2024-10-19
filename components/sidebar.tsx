@@ -15,7 +15,7 @@ import settingsicon from "@/public/images/settingsicon.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { AiOutlineClose } from "react-icons/ai"; // Close icon for mobile
+import { AiOutlineClose } from "react-icons/ai";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const pathname = usePathname();
@@ -44,9 +44,8 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     <div
       className={`fixed top-0 left-0 w-64 h-full bg-white shadow-xl transition-transform transform ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } lg:translate-x-0 lg:static z-50 overflow-y-auto`} // Added "overflow-y-auto" for scrolling
+      } lg:translate-x-0 lg:static z-50 overflow-y-auto`} 
     >
-      {/* Close button for mobile */}
       <button className="lg:hidden p-4" onClick={toggleSidebar}>
         <AiOutlineClose size={24} />
       </button>
