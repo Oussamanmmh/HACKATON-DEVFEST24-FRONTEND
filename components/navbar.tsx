@@ -41,7 +41,7 @@ const Navbar = ({ toggleSidebar }) => {
       }
     };
 
-    fetchNotifications();
+     fetchNotifications();
   }, [userId, token]);
 
   return (
