@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import weldingimage from "@/public/images/weldingimage.svg";
+import agvImage from "@/public/images/agv.svg"; // Replace with correct image path for AGV
 import view from "@/public/images/view.svg";
 import thresholds from "@/public/images/thresholds.svg";
 import reports from "@/public/images/reports.svg";
@@ -15,80 +15,89 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import * as XLSX from "xlsx"; // For Excel export
 
 const Page = () => {
-  const [machine, setmachine] = useState([]);
-  const fetchdata = async () => {
+  const [machine, setMachine] = useState([]);
+
+  const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:4000/logs/welding_robot_006"
-      );
-      setmachine(response.data);
-      console.log("machine : ", response.data);
+      const response = await axios.get("http://localhost:4000/logs/agv_003");
+      setMachine(response.data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchdata();
+    fetchData();
   }, []);
-  function createData(
-    temperature: string,
-    powerconsuption: string,
-    vibrationlevel: string,
-    armposition: string,
-    timestamp: string
-  ) {
-    return {
-      temperature,
-      powerconsuption,
-      vibrationlevel,
-      armposition,
-      timestamp,
-    };
-  }
 
-  const rows = [
-    createData(
-      machine[0]?.sensorData?.weld_temperature + "°C",
-      machine[0]?.sensorData?.power_consumption + "KwH",
-      machine[0]?.sensorData?.vibration_level + "mm/s",
-      machine[0]?.sensorData?.arm_position?.x +
-        ";" +
-        machine[0]?.sensorData?.arm_position?.y +
-        ";" +
-        machine[0]?.sensorData?.arm_position?.z,
-      machine[0]?.sensorData?.timestamp
-    ),
-  ];
+  // Create 10 rows of sample data
+  const rows = machine.slice(0, 10).map((entry) => ({
+    location: `${entry?.sensorData?.location?.x}; ${entry?.sensorData?.location?.y}; ${entry?.sensorData?.location?.z}`,
+    battery_level: entry?.sensorData?.battery_level + " %",
+    load_weight: entry?.sensorData?.load_weight + " kg",
+    speed: entry?.sensorData?.speed + " m/s",
+    distance_traveled: entry?.sensorData?.distance_traveled + " meters",
+    obstacle_detection: entry?.sensorData?.obstacle_detection,
+    navigation_status: entry?.sensorData?.navigation_status,
+    vibration_level: entry?.sensorData?.vibration_level + " mm/s",
+    temperature: entry?.sensorData?.temperature + "°C",
+    wheel_rotation_speed: entry?.sensorData?.wheel_rotation_speed + " RPM",
+    timestamp: new Date(entry?.sensorData?.timestamp).toLocaleString(),
+  }));
+
+  // Function to download JSON
+  const handleDownloadJSON = () => {
+    const jsonBlob = new Blob([JSON.stringify(rows, null, 2)], {
+      type: "application/json",
+    });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(jsonBlob);
+    link.download = "agv_003_report.json"; // Set the filename
+    link.click();
+  };
+
+  // Function to download Excel
+  const handleDownloadExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(rows); // Convert JSON to worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report");
+    XLSX.writeFile(workbook, "agv_003_report.xlsx"); // Set the filename
+  };
+
   return (
-    <div className=" bg-[#F5F6FA] p-5">
-      <div className="flex">
-        <Image alt="agvs logs" src={weldingimage} />
+    <div className="bg-[#F5F6FA] p-5">
+      {/* Machine Info Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+        <div className="flex justify-center items-center">
+          <Image alt="AGVs" src={agvImage} className="w-64 h-64" />
+        </div>
         <div>
-          <p className=" text-3xl font-bold">AGVS</p>
-          <div>
-            <p>machineId : {machine[0]?.machine_id} </p>
-            <p className="bg-[#E18E3A] text-white w-fit">
-              {" "}
-              {machine[0]?.status}{" "}
-            </p>
-          </div>
-          <p>machineType : {machine[0]?.machineType} </p>
-          <p>
-            Welding robots are responsible for joining metal components of a car
-            using various welding techniques such as spot welding or arc
-            welding. They are precise, fast, and ensure strong, high-quality
-            welds in the car assembly process. Here’s an expanded view of the
-            sensor data for welding robots:
+          <p className="text-3xl font-bold mb-4">AGVs</p>
+          <p className="text-lg mb-2">
+            <strong>Machine ID:</strong> {machine[0]?.machine_id}
           </p>
-          <div className=" text-[#996127]">
-            {machine &&
-            machine[0]?.warnings &&
-            Array.isArray(machine[0].warnings) ? (
+          <p className="text-lg mb-2">
+            <strong>Machine Type:</strong>{" "}
+            <span className="inline-block bg-gray-100 text-gray-800 px-2 py-1 rounded-md font-semibold">
+              {machine[0]?.machineType}
+            </span>
+          </p>
+          <p className="bg-[#E18E3A] text-white inline-block py-1 px-3 mb-2">
+            {machine[0]?.status}
+          </p>
+          <p className="text-lg mb-4">
+            AGVs are mobile robots that transport materials and components
+            within the factory, ensuring efficient and safe movement across the
+            facility.
+          </p>
+          <div className="text-[#996127]">
+            <p className="font-semibold mb-2">Warnings:</p>
+            {machine && machine[0]?.warnings?.length > 0 ? (
               machine[0].warnings.map((warning, index) => (
-                <div key={index}>{warning}</div>
+                <p key={index}>{warning}</p>
               ))
             ) : (
               <p>No warnings available</p>
@@ -96,58 +105,71 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <div className=" flex place-content-center">
-        <button className=" bg-[#815EEA] text-white capitalize rounded-lg p-3">
-          <Link href="/machines/agvslogs/agvs">
-            <p>view</p>
-            <div className=" flex">
-              <p className=" text-2xl mr-5"> real time metrics</p>
-              <Image alt="view" src={view} />
-            </div>
-          </Link>
+
+      {/* Buttons Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <Link href="/machines/agvslogs/agvs">
+          <button className="bg-[#815EEA] text-white w-full py-4 rounded-lg shadow-lg hover:bg-purple-700 transition flex flex-col items-center">
+            <p className="text-xl mb-1">View Real-Time Metrics</p>
+            <Image alt="view" src={view} width={30} height={30} />
+          </button>
+        </Link>
+
+        <button
+          onClick={handleDownloadJSON}
+          className="bg-[#CFEDDA] text-[#518B66] w-full py-4 rounded-lg shadow-lg hover:bg-green-200 transition flex flex-col items-center"
+        >
+          <p className="text-xl mb-1">Download JSON Report</p>
+          <Image alt="reports" src={reports} width={30} height={30} />
         </button>
 
-        <button className=" mx-5 bg-[#CFEDDA] text-[#518B66] capitalize rounded-lg p-3">
-          <p>download</p>
-          <div className=" flex">
-            <p className=" mr-5 text-2xl"> reports</p>
-            <Image alt="view" src={reports} />
-          </div>
-        </button>
-
-        <button className=" bg-[#BBBEFC] text-[#494D88] capitalize rounded-lg p-3">
-          <p>explore & reset</p>
-          <div className=" flex">
-            <p className=" text-2xl mr-5"> threshoalds</p>
-            <Image alt="view" src={thresholds} />
-          </div>
+        <button
+          onClick={handleDownloadExcel}
+          className="bg-[#BBBEFC] text-[#494D88] w-full py-4 rounded-lg shadow-lg hover:bg-blue-200 transition flex flex-col items-center"
+        >
+          <p className="text-xl mb-1">Download Excel Report</p>
+          <Image alt="thresholds" src={thresholds} width={30} height={30} />
         </button>
       </div>
+
+      {/* Expanded Schema Section */}
       <div>
-        <p>expanded schema</p>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <p className="text-2xl font-bold mb-4">Expanded Schema</p>
+        <TableContainer component={Paper} className="shadow-lg rounded-lg">
+          <Table sx={{ minWidth: 650 }} aria-label="machine data table">
             <TableHead>
-              <TableRow>
-                <TableCell>Temperature</TableCell>
-                <TableCell align="right">Power consumption</TableCell>
-                <TableCell align="right">vibration level</TableCell>
-                <TableCell align="right">arm position</TableCell>
-                <TableCell align="right">timestamp</TableCell>
+              <TableRow className="bg-gray-100">
+                <TableCell>Location (x, y, z)</TableCell>
+                <TableCell align="right">Battery Level</TableCell>
+                <TableCell align="right">Load Weight</TableCell>
+                <TableCell align="right">Speed</TableCell>
+                <TableCell align="right">Distance Traveled</TableCell>
+                <TableCell align="right">Obstacle Detection</TableCell>
+                <TableCell align="right">Navigation Status</TableCell>
+                <TableCell align="right">Vibration Level</TableCell>
+                <TableCell align="right">Temperature</TableCell>
+                <TableCell align="right">Wheel Rotation Speed</TableCell>
+                <TableCell align="right">Timestamp</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows.map((row, index) => (
                 <TableRow
-                  key={row.temperature}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">
-                    {row.temperature}
+                  <TableCell>{row.location}</TableCell>
+                  <TableCell align="right">{row.battery_level}</TableCell>
+                  <TableCell align="right">{row.load_weight}</TableCell>
+                  <TableCell align="right">{row.speed}</TableCell>
+                  <TableCell align="right">{row.distance_traveled}</TableCell>
+                  <TableCell align="right">{row.obstacle_detection}</TableCell>
+                  <TableCell align="right">{row.navigation_status}</TableCell>
+                  <TableCell align="right">{row.vibration_level}</TableCell>
+                  <TableCell align="right">{row.temperature}</TableCell>
+                  <TableCell align="right">
+                    {row.wheel_rotation_speed}
                   </TableCell>
-                  <TableCell align="right">{row.powerconsuption}</TableCell>
-                  <TableCell align="right">{row.vibrationlevel}</TableCell>
-                  <TableCell align="right">{row.armposition}</TableCell>
                   <TableCell align="right">{row.timestamp}</TableCell>
                 </TableRow>
               ))}
