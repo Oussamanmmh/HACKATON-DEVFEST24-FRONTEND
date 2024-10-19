@@ -23,18 +23,12 @@ export default function Notifications() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("responennnnn : " ,response.data);
-        
         // Sort notifications by updatedAt in descending order
         const sortedNotifications = response.data.sort(
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
         );
-
         setNotifications(sortedNotifications);
-
-        console.log(sortedNotifications);
       } catch (err) {
-        console.log(err);
         setError(err);
       } finally {
         setLoading(false);
@@ -42,9 +36,6 @@ export default function Notifications() {
     };
     fetchNotifications();
   }, []);
-  useEffect(() => {
-    console.log(selectedNotifications);
-  }, [selectedNotifications]);
 
   const indexOfLastNotification = currentPage * notificationsPerPage;
   const indexOfFirstNotification =
@@ -73,83 +64,74 @@ export default function Notifications() {
   };
 
   return (
-    <>
-      <section>
-        <Header
-          selectedNotifications={selectedNotifications}
-          setSelectedNotifications={setSelectedNotifications}
-          notifications={notifications}
-          setNotifications={setNotifications}
-        />
-        <div className="rounded-xl overflow-x-clip">
-          {currentNotifications.map((notification, index) => (
-            <Notify
-              key={index}
-              selectedNotifications={selectedNotifications}
-              setSelectedNotifications={setSelectedNotifications}
-              title={notification.title}
-              machineId={notification.machineId}
-              updatedAt={notification.updatedAt}
-              message={notification.message}
-              isRead={notification.isRead}
-              id={notification._id}
-            />
-          ))}
-        </div>
+    <section>
+      {/* Notifications Header */}
+      <Header
+        selectedNotifications={selectedNotifications}
+        setSelectedNotifications={setSelectedNotifications}
+        notifications={notifications}
+        setNotifications={setNotifications}
+      />
 
-        <div className="flex justify-between items-center text-gray-500 mt-10">
-          {/* Pagination Info */}
-          <p>
+      {/* Notifications List */}
+      <div className="bg-white rounded-xl shadow-md p-4">
+        {currentNotifications.length > 0 ? (
+          <div className="overflow-auto">
+            {currentNotifications.map((notification, index) => (
+              <Notify
+                key={index}
+                selectedNotifications={selectedNotifications}
+                setSelectedNotifications={setSelectedNotifications}
+                title={notification.title}
+                machineId={notification.machineId}
+                updatedAt={notification.updatedAt}
+                message={notification.message}
+                isRead={notification.isRead}
+                id={notification._id}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center">No Notifications Found</p>
+        )}
+
+        {/* Pagination */}
+        <div className="flex justify-between items-center mt-6">
+          <p className="text-sm text-gray-500">
             Showing {indexOfFirstNotification + 1} -{" "}
             {indexOfLastNotification > notifications.length
               ? notifications.length
               : indexOfLastNotification}{" "}
             of {notifications.length}
           </p>
+
+          {/* Pagination Controls */}
           <div className="flex items-center">
-            {/* Previous Button */}
             <button
               onClick={prevPage}
-              className="border-[1px] border-gray-300 p-2 rounded-tl-xl rounded-bl-xl"
-              disabled={currentPage === 1} // Disable on first page
+              disabled={currentPage === 1}
+              className={`p-2 rounded-l-xl border ${
+                currentPage === 1
+                  ? "bg-gray-100 text-gray-400"
+                  : "bg-white text-black"
+              }`}
             >
-              <svg
-                width="12"
-                height="14"
-                viewBox="0 0 8 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.41 10.4064L2.83 6.00002L7.41 1.59362L6 0.240021L0 6.00002L6 11.76L7.41 10.4064Z"
-                  fill="#202224"
-                />
-              </svg>
+              Prev
             </button>
-
-            {/* Next Button */}
             <button
               onClick={nextPage}
-              className="border-[1px] border-gray-300 p-2 rounded-br-xl rounded-tr-xl"
-              disabled={currentPage === totalPages} // Disable on last page
+              disabled={currentPage === totalPages}
+              className={`p-2 rounded-r-xl border ${
+                currentPage === totalPages
+                  ? "bg-gray-100 text-gray-400"
+                  : "bg-white text-black"
+              }`}
             >
-              <svg
-                width="12"
-                height="14"
-                viewBox="0 0 8 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="rotate-180"
-              >
-                <path
-                  d="M7.41 10.4064L2.83 6.00002L7.41 1.59362L6 0.240021L0 6.00002L6 11.76L7.41 10.4064Z"
-                  fill="#202224"
-                />
-              </svg>
+              Next
             </button>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
