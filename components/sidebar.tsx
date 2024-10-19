@@ -15,38 +15,37 @@ import settingsicon from "@/public/images/settingsicon.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { AiOutlineClose } from "react-icons/ai"; // Close icon for mobile
+import { AiOutlineClose } from "react-icons/ai";
 
 const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
   const pathname = usePathname();
 
   const navlinks = [
-    { id: 0, text: "dashboard", path: "/dashboard", icon: dashboardicon },
-    { id: 1, text: "assigned Tasks", path: "/assignedtasks", icon: tasksicon },
-    { id: 2, text: "machines", path: "/machines", icon: machinesicon },
-    { id: 3, text: "chat with bots", path: "/chatwithbots", icon: chaticon },
-    { id: 4, text: "schedule", path: "/schedule", icon: scheduelicon },
+    { id: 0, text: "Dashboard", path: "/dashboard", icon: dashboardicon },
+    { id: 1, text: "Assigned Tasks", path: "/assignedtasks", icon: tasksicon },
+    { id: 2, text: "Machines", path: "/machines", icon: machinesicon },
+    { id: 3, text: "Chat with bots", path: "/chatwithbots", icon: chaticon },
+    { id: 4, text: "Schedule", path: "/schedule", icon: scheduelicon },
     {
       id: 5,
-      text: "statistiques",
+      text: "Statistiques",
       path: "/statistiques",
       icon: statistiquesicon,
     },
-    { id: 6, text: "tables", path: "/tables", icon: tablesicon },
-    { id: 7, text: "incomes", path: "/incomes", icon: incomesicon },
-    { id: 8, text: "reports", path: "/reports", icon: reportsicon },
-    { id: 9, text: "team", path: "/team", icon: teamicon },
-    { id: 10, text: "settings", path: "/settings", icon: settingsicon },
-    { id: 11, text: "logout", path: "/logout", icon: logouticon },
+    { id: 6, text: "Tables", path: "/tables", icon: tablesicon },
+    { id: 7, text: "Incomes", path: "/incomes", icon: incomesicon },
+    { id: 8, text: "Reports", path: "/reports", icon: reportsicon },
+    { id: 9, text: "Team", path: "/team", icon: teamicon },
+    { id: 10, text: "Settings", path: "/settings", icon: settingsicon },
+    { id: 11, text: "Logout", path: "/logout", icon: logouticon },
   ];
 
   return (
     <div
       className={`fixed top-0 left-0 w-64 h-full bg-white shadow-xl transition-transform transform ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } lg:translate-x-0 lg:static z-50 overflow-y-auto`} // Added "overflow-y-auto" for scrolling
+      } lg:translate-x-0 lg:static z-50 overflow-y-auto`}
     >
-      {/* Close button for mobile */}
       <button className="lg:hidden p-4" onClick={toggleSidebar}>
         <AiOutlineClose size={24} />
       </button>
