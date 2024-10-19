@@ -15,12 +15,9 @@ import { AiOutlineWarning, AiOutlineCheckCircle } from "react-icons/ai";
 import humanresources from "@/public/images/hr.svg";
 import path from "@/public/images/path.svg";
 import pathdown from "@/public/images/pathdown.svg";
-// import totalorder from "@/public/images/totalorder.svg";
-// import totalsales from "@/public/images/totalsales.svg";
-// import opi from "@/public/images/opi.svg";
 import totaltasks from "@/public/images/totaltasks.svg";
 import totalwarnings from "@/public/images/totalwarnings.svg";
-import completedtasks from "@/public/images/completedtasks.svg";
+import productioncount from "@/public/images/completedtasks.svg";
 
 interface Task {
   _id: string;
@@ -42,7 +39,7 @@ interface DashboardData {
   totalTasks: number;
   openWarnings: number;
   totalUsers: number;
-  completedTasks: number;
+  productionCount: number; // Changed from completedTasks to productionCount
 }
 
 interface MachineInsight {
@@ -86,7 +83,7 @@ const Page = () => {
     totalTasks: 0,
     openWarnings: 0,
     totalUsers: 0,
-    completedTasks: 0,
+    productionCount: 0, // Updated field name
   });
 
   const [energySummary, setEnergySummary] = useState<EnergySummary | null>(
@@ -114,9 +111,14 @@ const Page = () => {
         );
         const totalUsers = usersResponse.data.length;
 
-        const completedTasks = tasksResponse.data.filter(
-          (task: Task) => task.isDone
-        ).length;
+        // Fetch the product count from the backend
+        const productCountResponse = await axios.get(
+          "http://localhost:4000/order-tracking//products/count"
+        );
+
+        const productionCount = productCountResponse.data["totalProduced"];
+
+        console.log(productionCount);
 
         const energyResponse = await axios.get(
           "http://localhost:4000/ai/energy-summary"
@@ -127,7 +129,7 @@ const Page = () => {
           totalTasks,
           openWarnings,
           totalUsers,
-          completedTasks,
+          productionCount, // Use production count from the server
         });
         setEnergySummary(energyData);
         setLoading(false);
@@ -184,11 +186,11 @@ const Page = () => {
     },
     {
       id: 3,
-      name: "Completed Tasks",
-      image: completedtasks,
-      amount: `${dashboardData.completedTasks}`,
+      name: "Products Produced", // Changed from Completed Tasks
+      image: productioncount, // Updated image reference
+      amount: `${dashboardData.productionCount}`, // Use productionCount
       percentage: "",
-      text: "Completed tasks in the system",
+      text: "Total products successfully produced",
       sign: path,
       color: "text-green-500",
     },
