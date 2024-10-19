@@ -19,6 +19,11 @@ const Navbar = ({ toggleSidebar }) => {
         name: "Loading...",
         profileImage: null,
       }); // Initial state for profile
+      setUser({
+        userId: storedUser.userId,
+        name: "Loading...",
+        profileImage: null,
+      }); // Initial state for profile
     }
   }, []);
 
@@ -86,7 +91,7 @@ const Navbar = ({ toggleSidebar }) => {
   };
 
   return (
-    <nav className="flex justify-between lg:pl-19 items-center p-5 bg-white shadow-md relative z-10">
+    <nav className="flex justify-between lg:pl-19 items-center p-5 bg-white relative z-10">
       <div className="flex items-center">
         {/* Hamburger Menu for mobile view */}
         <button className="lg:hidden mr-4" onClick={toggleSidebar}>

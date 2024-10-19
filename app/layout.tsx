@@ -8,7 +8,8 @@ import { AuthProvider } from "./context/auth";
 import LoginPage from "./auth/login/page";
 import { useEffect, useState } from "react";
 import CircularProgress from "@mui/material/CircularProgress"; // Import spinner
-import ProfilePage from "@/components/profile/profilePage";
+import { messaging, getToken } from "@/firebase"; // Import Firebase config
+import axios from "axios"; // Axios to send the FCM token to the server
 
 const geistSans = localFont({
   src: "../public/fonts/GeistVF.woff",
@@ -39,6 +40,60 @@ export default function RootLayout({
 
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
+  // FCM token retrieval and service worker registration
+  useEffect(() => {
+    if (typeof window !== "undefined" && messaging) {
+      const getAndSendFCMToken = async () => {
+        try {
+          // Request permission from the user to show notifications
+          const currentToken = await getToken(messaging, {
+            vapidKey:
+              "BM7sWd8vOAWim376TRmAlK1HyrHX5C93jjUL_W-ptI3jMcz0FkItNroYU5BHxh-r-IqN9XLyIh8Kqe_RAu98QyA",
+          });
+
+          if (currentToken) {
+            const userId = JSON.parse(localStorage.getItem("user")).userId;
+            const token = JSON.parse(localStorage.getItem("user")).token;
+
+            // Send the FCM token to the backend to store it for sending notifications
+            await axios.put(
+              `http://localhost:4000/users/${userId}`,
+              { notificationsToken: currentToken },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            console.log("FCM Token successfully sent to server");
+          } else {
+            console.log(
+              "No FCM token available. Request permission to generate one."
+            );
+          }
+        } catch (err) {
+          console.error("Error retrieving FCM token:", err);
+        }
+      };
+
+      // Register service worker and get the FCM token
+      getAndSendFCMToken();
+    }
+
+    // Register the service worker for Firebase Messaging
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("/firebase-messaging-sw.js")
+          .then((registration) => {
+            console.log(
+              "Service Worker registered with scope:",
+              registration.scope
+            );
+          })
+          .catch((err) => {
+            console.error("Service Worker registration failed:", err);
+          });
+      });
+    }
+  }, []);
+
   if (loading) {
     // Display spinner while verifying login
     return <div className="flex justify-center items-center h-screen"></div>;
@@ -57,8 +112,6 @@ export default function RootLayout({
                   isSidebarOpen={isSidebarOpen}
                   toggleSidebar={toggleSidebar}
                 />
-                
-                
 
                 {/* Main Content Area */}
                 <main className="flex-1 p-5 overflow-auto">{children}</main>
