@@ -91,8 +91,8 @@ export default function AdvancedTable() {
               <TableCell component="th" scope="row">
                 <div className="flex items-center">
                   <Image
-                    src={""}
-                    alt={row.name}
+                    src={row.profileImage}
+                    alt={"ff"}
                     width={40}
                     height={40}
                     className="mr-4"

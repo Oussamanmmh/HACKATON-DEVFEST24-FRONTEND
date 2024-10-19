@@ -36,7 +36,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar }) => {
     { id: 8, text: "Reports", path: "/reports", icon: reportsicon },
     { id: 9, text: "Team", path: "/team", icon: teamicon },
     // { id: 10, text: "Settings", path: "/settings", icon: settingsicon },
-    { id: 11, text: "Logout", path: "/logout", icon: logouticon },
+    // { id: 11, text: "Logout", path: "/logout", icon: logouticon },
   ];
 
   return (

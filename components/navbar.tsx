@@ -21,9 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setToken(storedUser.token);
-      
 
-      
       setUser({
         userId: storedUser.userId,
         name: "Loading...",
@@ -107,11 +105,13 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
         <button className="lg:hidden mr-4" onClick={toggleSidebar}>
           <FiMenu size={24} />
         </button>
-        <label htmlFor="" className="text-3xl font-bold">
-          <p>
-            <span className="text-purple-500">Auto</span>Track
-          </p>
-        </label>
+        <Link href="/">
+          <label htmlFor="" className="text-3xl font-bold cursor-pointer">
+            <p>
+              <span className="text-purple-500">Auto</span>Track
+            </p>
+          </label>
+        </Link>
       </div>
 
       <div className="flex items-center space-x-5">
@@ -126,7 +126,10 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             <FiBell size={30} className="text-gray-700" />
           </Link>
         </div>
-        <div className="flex items-center cursor-pointer" onClick={()=>setShow(true)}>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => setShow(true)}
+        >
           <div className="bg-gray-300 rounded-full overflow-hidden h-[50px] w-[50px] flex items-center justify-center mr-3">
             {user?.profileImage ? (
               <Image
@@ -155,7 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
           <span>Logout</span>
         </button>
       </div>
-      <ProfilePage show={show} setShow={setShow}/>
+      <ProfilePage show={show} setShow={setShow} handlelogout={handleLogout} />
     </nav>
   );
 };

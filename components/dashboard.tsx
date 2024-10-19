@@ -113,7 +113,7 @@ const Page = () => {
 
         // Fetch the product count from the backend
         const productCountResponse = await axios.get(
-          "http://localhost:4000/order-tracking//products/count"
+          "http://localhost:4000/order-tracking/products/count"
         );
 
         const productionCount = productCountResponse.data["totalProduced"];

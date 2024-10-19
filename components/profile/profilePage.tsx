@@ -7,7 +7,7 @@ import axios from "axios";
 import { FiUser } from "react-icons/fi";
 import uploadimg from "@/public/images/uploadimg.svg";
 
-export default function ProfilePage({ show, setShow }) {
+export default function ProfilePage({ show, setShow, handlelogout }) {
   const [user, setUser] = useState({});
 
   const [error, setError] = useState(null);
@@ -50,6 +50,14 @@ export default function ProfilePage({ show, setShow }) {
   // Handle file selection
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+  };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImageUrl(imageUrl);
+    }
   };
 
   // Handle file upload
@@ -133,9 +141,9 @@ export default function ProfilePage({ show, setShow }) {
       </div>
       <div className="flex flex-col justify-center items-center gap-2">
         <div className=" relative">
-          {user.profileImage ? (
+          {user.profileImage || uploadedImageUrl ? (
             <Image
-              src={user.profileImage} // just refresh after selecting the img
+              src={user.profileImage || uploadedImageUrl} // just refresh after selecting the img
               alt="profile"
               width={100}
               height={100}
@@ -149,15 +157,25 @@ export default function ProfilePage({ show, setShow }) {
           )}
           <input
             type="file"
-            className=" bg-red-400"
-            onChange={handleFileChange}
+            name="uploadbtn"
+            id="fileInput"
+            style={{ display: "none" }}
+            onChange={handleImageChange}
           />
           <button
-            onClick={handleUpload}
+            onClick={() => {
+              // handleUpload();
+              document.getElementById("fileInput")?.click();
+            }}
+            type="button"
+            // onClick={handleUpload}
             // disabled={uploadimg}
-            className=" absolute right-0 bottom-0 z-[90]"
+            className=" absolute right-0 bottom-0 z-[90] cursor-pointer"
           >
             <Image src={uploadimg} alt="upload" className=" z-[90]" />
+          </button>
+          <button onClick={handleUpload} type="button" disabled={uploading}>
+            Upload
           </button>
         </div>
         <h1 className="text-2xl font-bold uppercase">{user.name}</h1>
@@ -181,7 +199,10 @@ export default function ProfilePage({ show, setShow }) {
       />
 
       <div className="flex justify-center">
-        <button className="flex items-center gap-4 font-bold ">
+        <button
+          onClick={handlelogout}
+          className="flex items-center gap-4 font-bold "
+        >
           <p>Log Out</p>
           <Image src={logout} alt="logout" width={20} height={20} />
         </button>
