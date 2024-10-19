@@ -39,7 +39,7 @@ export default function BasicTable() {
         const userId = JSON.parse(localStorage.getItem('user')).userId;
         const token = JSON.parse(localStorage.getItem('user')).token;
          try{
-          const response = await axios.get(`http://localhost:4000/tasks/tasks/user/${userId} ` ,
+          const response = await axios.get(`http://localhost:4000/tasks/user/${userId}` ,
           {headers: {
             Authorization: `Bearer ${token}`
           }}
