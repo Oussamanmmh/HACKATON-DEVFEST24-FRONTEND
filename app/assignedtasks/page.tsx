@@ -9,10 +9,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import axios from "axios";
-import { Checkbox, Chip } from "@mui/material";
-import { CheckCircleOutline } from "@mui/icons-material";
-
-export default function TaskTable() {
+import { Checkbox, Chip  } from "@mui/material";
+import CheckCircleOutline from "@mui/icons-material/CheckCircleOutline";
+const Page = () => {
   const [rows, setRows] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -160,3 +159,6 @@ export default function TaskTable() {
     </div>
   );
 }
+
+export default Page;
+
