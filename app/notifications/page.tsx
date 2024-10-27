@@ -23,7 +23,6 @@ export default function Notifications() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        // Sort notifications by updatedAt in descending order
         const sortedNotifications = response.data.sort(
           (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)
         );
@@ -37,9 +36,21 @@ export default function Notifications() {
     fetchNotifications();
   }, []);
 
+  const markAsRead = async (id) => {
+    try {
+      await axios.put(`http://localhost:4000/notifications/${id}/read`);
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification._id === id ? { ...notification, isRead: true } : notification
+        )
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const indexOfLastNotification = currentPage * notificationsPerPage;
-  const indexOfFirstNotification =
-    indexOfLastNotification - notificationsPerPage;
+  const indexOfFirstNotification = indexOfLastNotification - notificationsPerPage;
   const currentNotifications = notifications.slice(
     indexOfFirstNotification,
     indexOfLastNotification
@@ -65,7 +76,6 @@ export default function Notifications() {
 
   return (
     <section>
-      {/* Notifications Header */}
       <Header
         selectedNotifications={selectedNotifications}
         setSelectedNotifications={setSelectedNotifications}
@@ -73,13 +83,12 @@ export default function Notifications() {
         setNotifications={setNotifications}
       />
 
-      {/* Notifications List */}
       <div className="bg-white rounded-xl shadow-md p-4">
         {currentNotifications.length > 0 ? (
           <div className="overflow-auto">
-            {currentNotifications.map((notification, index) => (
+            {currentNotifications.map((notification) => (
               <Notify
-                key={index}
+                key={notification._id}
                 selectedNotifications={selectedNotifications}
                 setSelectedNotifications={setSelectedNotifications}
                 title={notification.title}
@@ -88,6 +97,7 @@ export default function Notifications() {
                 message={notification.message}
                 isRead={notification.isRead}
                 id={notification._id}
+                markAsRead={markAsRead} // Pass markAsRead handler
               />
             ))}
           </div>
@@ -95,7 +105,6 @@ export default function Notifications() {
           <p className="text-gray-500 text-center">No Notifications Found</p>
         )}
 
-        {/* Pagination */}
         <div className="flex justify-between items-center mt-6">
           <p className="text-sm text-gray-500">
             Showing {indexOfFirstNotification + 1} -{" "}
@@ -105,7 +114,6 @@ export default function Notifications() {
             of {notifications.length}
           </p>
 
-          {/* Pagination Controls */}
           <div className="flex items-center">
             <button
               onClick={prevPage}
